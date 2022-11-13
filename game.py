@@ -187,6 +187,19 @@ def upgrades():
 			save.camp.coins-=50
 			return
 
+def send_bot(bot,letter):
+	while True:
+		if (input(f"Send scout {letter} on a mission? (Y/n): ") or "y")[0].lower()=="y":
+			break
+		elif (input("Are you sure? (y/N): ") or "n")[0].lower()=="y":
+			print(f"Not sending scout {letter} on a mission.")
+			return
+	print("How long should the mission be?")
+	length = menu([("Short (1 day)",1),("Medium (7 days)",7),("Long (1 month)",30)])
+	print("What should the bot focus on?")
+	focus = menu([("No particular focus",None),("Focus on getting rations","rations"),("Focus on getting water","water"),("Focus on getting artifacts (for money)","artifacts"),("Focus on not getting attacked","not_attacked")])
+	bot.set_mission(length,focus)
+
 def check_event(ev):
 	return ev["type"]!="nothing"
 
@@ -244,34 +257,13 @@ def mainloop():
 		if not running: continue
 		if save.scout_a.mission_length == 0:
 			print("Scout A is not currently on a mission.")
-			if (input("Send scout A on a mission? (Y/n): ") or "y").lower()[0]=="n" and (input("Are you sure? (y/N): ") or "n").lower()[0]=="y":
-				print("Not sending scout A on a mission.")
-			else:
-				print("How long should the mission be?")
-				length = menu([("Short (1 day)",1),("Medium (7 days)",7),("Long (1 month)",30)])
-				print("What should the bot focus on?")
-				focus = menu([("No particular focus",None),("Focus on getting rations","rations"),("Focus on getting water","water"),("Focus on getting artifacts (for money)","artifacts"),("Focus on not getting attacked","not_attacked")])
-				save.scout_a.set_mission(length,focus)
+			send_bot(save.scout_a,"A")
 		if save.scout_b.mission_length == 0:
 			print("Scout B is not currently on a mission.")
-			if (input("Send scout B on a mission? (Y/n): ") or "y").lower()[0]=="n" and (input("Are you sure? (y/N): ") or "n").lower()[0]=="y":
-				print("Not sending scout B on a mission.")
-			else:
-				print("How long should the mission be?")
-				length = menu([("Short (1 day)",1),("Medium (7 days)",7),("Long (1 month)",30)])
-				print("What should the bot focus on?")
-				focus = menu([("No particular focus",None),("Focus on getting rations","rations"),("Focus on getting water","water"),("Focus on getting artifacts (for money)","artifacts"),("Focus on not getting attacked","not_attacked")])
-				save.scout_b.set_mission(length,focus)
+			send_bot(save.scout_b,"B")
 		if save.scout_c.mission_length == 0:
 			print("Scout C is not currently on a mission.")
-			if (input("Send scout C on a mission? (Y/n): ") or "y").lower()[0]=="n" and (input("Are you sure? (y/N): ") or "n").lower()[0]=="y":
-				print("Not sending scout C on a mission.")
-			else:
-				print("How long should the mission be?")
-				length = menu([("Short (1 day)",1),("Medium (7 days)",7),("Long (1 month)",30)])
-				print("What should the bot focus on?")
-				focus = menu([("No particular focus",None),("Focus on getting rations","rations"),("Focus on getting water","water"),("Focus on getting artifacts (for money)","artifacts"),("Focus on not getting attacked","not_attacked")])
-				save.scout_c.set_mission(length,focus)
+			send_bot(save.scout_c,"C")
 		scout_a_events = save.scout_a.events(save.camp.date,save.rng)
 		scout_b_events = save.scout_b.events(save.camp.date,save.rng)
 		scout_c_events = save.scout_c.events(save.camp.date,save.rng)
